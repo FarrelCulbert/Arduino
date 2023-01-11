@@ -1,0 +1,31 @@
+// C++ code
+//
+int ledDelay = 2000 ; 
+int redPin = 9 ;
+int yellowPin = 8 ;
+int greenPin = 7 ;
+
+void setup()
+{
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(yellowPin, OUTPUT);
+}
+
+void loop()
+{
+digitalWrite(redPin, HIGH);
+  delay(ledDelay);
+  digitalWrite(greenPin, LOW);
+  delay(ledDelay);
+  digitalWrite(yellowPin,HIGH);
+  delay(ledDelay);
+  digitalWrite(redPin, LOW);
+  delay(ledDelay);
+  digitalWrite(greenPin, HIGH);
+  delay(ledDelay);
+  digitalWrite(yellowPin, LOW);
+  delay(ledDelay);
+  
+  
+}
