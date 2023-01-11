@@ -1,0 +1,22 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27, 2,1,0,4,5,6,7,3, POSITIVE);
+int lcdDelay = 500;
+
+void setup() {
+  lcd.begin (16,2); //Ukuran LCD I2C 
+
+}
+
+void loop() {
+  lcd.setCursor(6,0); //lokasi tulisan (X,Y)
+  lcd.print("HALO");
+  lcd.scrollDisplayLeft(); //Geser tulisan ke kiri
+  delay(lcdDelay);
+  
+  lcd.setCursor(4,1); //lokasi Tulisan (X,Y)
+  lcd.print("APAKABAR");
+  lcd.scrollDisplayRight(); //Geser tulisan ke kanan
+  delay(lcdDelay);
+
+}
