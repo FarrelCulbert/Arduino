@@ -1,0 +1,32 @@
+#include <Servo.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+Servo servo_1;
+int flex_1 = A0;
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void setup()  
+{
+  servo_1.attach(0);
+
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Posisi Servo: ");
+}
+
+void loop()
+{
+  int flex_1_pos;  
+  int servo_1_pos;  
+  flex_1_pos = analogRead(flex_1); 
+  servo_1_pos = map(flex_1_pos, 800, 900, 0, 180); // konversi nilai sensor menjadi sudut servo
+  servo_1_pos = constrain(servo_1_pos, 0, 180); // batasi nilai sudut menjadi antara 0 hingga 180 derajat
+  servo_1.write(servo_1_pos); // kontrol servo motor
+  
+  lcd.setCursor(0, 1);
+  lcd.print(servo_1_pos); // tampilkan sudut servo pada LCD
+}
