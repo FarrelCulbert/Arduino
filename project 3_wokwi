@@ -1,0 +1,30 @@
+// Mendefinisikan pin input dari PIR sensor
+int pirPin = 2;
+int buzzerPin = 9;
+
+void setup() {
+  // Mengatur pin input sebagai input
+  pinMode(pirPin, INPUT);
+  pinMode(buzzerPin, OUTPUT);
+  // Memulai serial communication dengan baud rate 9600
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Membaca nilai dari PIR sensor
+  int motionDetected = digitalRead(pirPin);
+  
+  // Jika gerakan terdeteksi
+  if (motionDetected == HIGH) {
+    Serial.println("Gerakan Terdeteksi!");
+    tone(buzzerPin,262);
+  }
+  // Jika gerakan tidak terdeteksi
+  else {
+    Serial.println("Tidak Terjadi Pergerakan");
+    noTone(buzzerPin);
+  }
+  
+  // Jeda selama 500 milidetik sebelum membaca ulang
+  delay(500);
+}
