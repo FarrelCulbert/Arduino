@@ -1,0 +1,71 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <MFRC522.h>
+
+#define SS_PIN 10
+#define RST_PIN 9
+#define BUZZER_PIN 7
+
+MFRC522 mfrc522(SS_PIN, RST_PIN);
+
+byte kartu1[] = {0xC4, 0x11, 0x72, 0x29};
+byte kartu2[] = {0xE3, 0x56, 0x43, 0x1C};
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void setup() {
+  Serial.begin(9600);
+  lcd.begin();
+  lcd.backlight();
+  lcd.clear();
+  lcd.setCursor(3, 0);
+  lcd.print("Tempelkan");
+  lcd.setCursor(3, 1);
+  lcd.print("kartu RFID");
+  SPI.begin();
+  mfrc522.PCD_Init();
+  pinMode(BUZZER_PIN, OUTPUT);
+}
+
+void loop() {
+  if (!mfrc522.PICC_IsNewCardPresent()) {
+    return;
+  }
+  if (!mfrc522.PICC_ReadCardSerial()) {
+    return;
+  }
+
+  if (memcmp(mfrc522.uid.uidByte, kartu1, 4) == 0) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Satpam 1");
+  } else if (memcmp(mfrc522.uid.uidByte, kartu2, 4) == 0) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Satpam 2");
+  } else {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Tidak Dikenali");
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(500);
+    digitalWrite(BUZZER_PIN, LOW);
+    delay(500);
+    digitalWrite(BUZZER_PIN, HIGH);
+    delay(500);
+    digitalWrite(BUZZER_PIN, LOW);
+    delay(500);
+  }
+
+  Serial.print("ID kartu: ");
+  for (byte i = 0; i < mfrc522.uid.size; i++) {
+    Serial.print(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " ");
+    Serial.print(mfrc522.uid.uidByte[i], HEX);
+  }
+  Serial.println();
+  delay(1000);
+  lcd.clear(); // Hapus tampilan LCD
+  lcd.setCursor(0, 0); // Pindahkan cursor ke posisi 0,0
+  lcd.print("Tempelkan Kartu"); // Tampilkan pesan "RFID Ready" pada LCD
+  
+}
