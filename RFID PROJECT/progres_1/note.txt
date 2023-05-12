@@ -1,0 +1,1 @@
+membuat rfid dengan mikrokontroler nodemcu amica yang terhubung dengan lcdi2c untuk menampilkan apakah id tag terdaftar atau tidak dan terhubung ke buzzer sebagai notifikasi kerika id tag terdaftar lalu terhubung ke blynk sebagai monitoring online.
