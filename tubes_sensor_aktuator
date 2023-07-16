@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
+#include <RTClib.h>
 
 // Mendefinisikan pin yang digunakan
 const int ldrPin = A0;       // Pin analog untuk sensor LDR
@@ -7,6 +8,7 @@ const int pwmPin = 9;        // Pin PWM untuk mengontrol kecerahan LED
 const int ledPin = 13;       // Pin LED
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);  // Inisialisasi objek LCD I2C dengan alamat 0x27
+RTC_DS1307 rtc;
 
 void setup() {
   pinMode(pwmPin, OUTPUT);   // Mengatur pin pwmPin sebagai OUTPUT
@@ -14,15 +16,21 @@ void setup() {
 
   lcd.begin();          // Inisialisasi LCD dengan ukuran 16x2
   lcd.backlight();           // Menghidupkan backlight LCD
-  lcd.setCursor(0, 0);
-  lcd.print("LDR:");
-  lcd.setCursor(0, 1);
-  lcd.print("PWM:");
+  
+  Wire.begin();
+  rtc.begin();
+  
+  if (!rtc.isrunning()) {
+    Serial.println("RTC tidak ditemukan! Jalankan setRTC() untuk mengatur tanggal dan waktu.");
+  }
   
   Serial.begin(9600);        // Inisialisasi Serial Monitor
 }
 
 void loop() {
+  // Baca tanggal dan waktu dari RTC
+  DateTime now = rtc.now();
+  
   int ldrValue = analogRead(ldrPin);  // Membaca nilai LDR
   int pwmValue = map(ldrValue, 0, 1023, 0, 180);  // Mengubah nilai LDR menjadi rentang PWM
   
@@ -39,10 +47,29 @@ void loop() {
   Serial.print(" | Nilai PWM: ");
   Serial.println(pwmValue);
   
-  lcd.setCursor(4, 0);
+  lcd.setCursor(0, 0);
+  lcd.print("LDR:");
   lcd.print(ldrValue);
-  lcd.setCursor(4, 1);
+
+  lcd.setCursor(9, 0);
+  lcd.print("PWM:");
   lcd.print(pwmValue);
   
+  lcd.setCursor(0, 1);
+  printDigits(now.hour());
+  lcd.print(":");
+  printDigits(now.minute());
+  lcd.print(":");
+  printDigits(now.second());
+
+
+  
   delay(1000);  // Delay singkat untuk stabilitas
+}
+
+void printDigits(int digits) {
+  if (digits < 10) {
+    lcd.print("0");
+  }
+  lcd.print(digits);
 }
