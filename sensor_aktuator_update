@@ -1,39 +1,58 @@
-#include <Wire.h> 
-#include <LiquidCrystal_I2C.h> // Memasukkan perpustakaan LCD I2C
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 
-const int ldrPin = A0; // Pin LDR terhubung ke pin analog A0
-const int ledPin = 6;  // Pin LED terhubung ke pin PWM 6
+const int ldrPin = A0;
+const int ledPin = 6;
 
-LiquidCrystal_I2C lcd(0x27, 16, 2); // Inisialisasi objek LCD I2C dengan alamat 0x27, 16 kolom, dan 2 baris
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 void setup() {
   pinMode(ledPin, OUTPUT);
-  // Tidak perlu mengatur pinMode untuk pin analog (LDR)
-  Serial.begin(9600); // Inisialisasi komunikasi serial untuk pemantauan nilai LDR
-  lcd.begin();    // Inisialisasi LCD
-  lcd.backlight();     // Hidupkan lampu latar LCD
+  Serial.begin(9600);
+  lcd.begin();
+  lcd.backlight();
 }
 
 void loop() {
-  int ldrValue = analogRead(ldrPin); // Baca nilai LDR dari pin analog
-  int pwmValue = map(ldrValue, 0, 1023, 0, 255); // Mapping nilai LDR ke rentang PWM (0-255)
+  int ldrValue = analogRead(ldrPin);
+  int pwmValue;
+  String ket;
 
-  analogWrite(ledPin, pwmValue); // Atur intensitas LED menggunakan PWM
+  // Menentukan Nilai PWM Berdasarkan Nilai LDR
+  if (ldrValue < 600) {
+    pwmValue = 0; 
+    ket = "Mati";
+  } else if (ldrValue >= 600 && ldrValue <= 670) {
+    pwmValue = 160;
+    ket = "Redup";
+  } else if (ldrValue > 670 && ldrValue <= 720) {
+    pwmValue = 175;
+    ket = "Sedang";
+  } else {
+    pwmValue = 200;
+    ket = "Terang";
+  }
+
+  analogWrite(ledPin, pwmValue);
 
   Serial.print("{\"LDR\":");
   Serial.print(ldrValue);
   Serial.print(",\"PWM\":");
-  Serial.print(pwmValue); 
+  Serial.print(pwmValue);
   Serial.println("}");
 
-  // Tampilkan nilai LDR dan PWM di LCD
-  lcd.clear(); // Hapus tampilan sebelumnya
+  // Program Optional Menampilkan Nilai Dan Keterangan Di LCDI2C
+  lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("LDR: ");
   lcd.print(ldrValue);
+  lcd.setCursor(10,0);
+  lcd.print("Ket:");
   lcd.setCursor(0, 1);
   lcd.print("PWM: ");
   lcd.print(pwmValue);
+  lcd.setCursor(10,1);
+  lcd.print(ket);
 
-  delay(500); // Tunda agar tidak ada pembacaan berulang terlalu cepat
+  delay(500);
 }
