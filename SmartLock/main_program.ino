@@ -14,6 +14,7 @@ Servo myservo; // Inisialisasi servo
 char* allowedCardIDs[] = {
   "XXXXXXXXXX", // Ganti dengan ID kartu yang diizinkan
   "YYYYYYYYYY"  // Ganti dengan ID kartu lainnya jika diperlukan
+  //ID Kartu bisa di dapatkan dengan menjalankan program ID_Read
 };
 
 void setup() {
