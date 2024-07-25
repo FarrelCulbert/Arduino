@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Form</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <form id="esp32Form" action="/get">
+            <div class="input-group">
+                <h2>Network Setting</h2>
+                <div class="input-item">
+                    <label for="ssid">SSID:</label>
+                    <input type="text" id="ssid" name="ssid" value=%SSID% placeholder="masukkan SSID">
+                </div>
+                <div class="input-item">
+                    <label for="password">Password:</label>
+                    <input type="text" id="password" name="password" value=%PASSWORD% placeholder="masukkan Password">
+                </div>
+                <div class="input-item">
+                    <label for="ip">IP Address Server:</label>
+                    <input type="text" id="ip" name="ip" value=%IP% placeholder="masukkan IP Address Server">
+                </div>
+            </div>
+            <div class="input-group">
+                <h2>Time Interval Setting</h2>
+                <div class="input-item">
+                    <label for="reset">Interval waktu reset:</label>
+                    <input type="text" id="reset" name="reset" value=%RESET% placeholder="Interval reset dalam mS">
+                </div>
+                <div class="input-item">
+                    <label for="send">Interval waktu pengiriman data:</label>
+                    <input type="text" id="send" name="send" value=%SEND% placeholder="Interval pengiriman data dalam mS">
+                </div>
+                <div class="input-item">
+                    <label for="count">Interval waktu penghitungan I.7:</label>
+                    <input type="text" id="count" name="count" value=%COUNT% placeholder="Interval penghitungan dalam mS">
+                </div>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <footer>
+        <p>%FOOTER_INFO%</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
